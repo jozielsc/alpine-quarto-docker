@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+CACHE_DIR=$HOME/.cache/quarto-docker
+PROJECT_DIR="$PWD"
+PREVIEW_PORT=4200
+
+mkdir -p "$CACHE_DIR"
+
+# Comando base como array
+CMD=(
+  docker run --rm -it
+  --user $(id -u):$(id -g)
+  -v "$PROJECT_DIR":/project
+  -v "$CACHE_DIR":/tmp/cache
+  -w /project
+  -e XDG_CACHE_HOME=/tmp/cache
+)
+
+# Se for `preview`, adiciona porta e opções extras
+if [ "$1" = "preview" ]; then
+  shift # remove preview
+
+  CMD+=(
+    -p "$PREVIEW_PORT:$PREVIEW_PORT"
+    ghcr.io/quarto-dev/quarto:latest
+    quarto preview "$@"
+    --port "$PREVIEW_PORT"
+    --host 0.0.0.0
+  )
+else
+  # Comando normal
+  CMD+=(
+    ghcr.io/quarto-dev/quarto:latest
+    quarto "$@"
+  )
+fi
+
+# Executa diretamente
+"${CMD[@]}"
