@@ -1,8 +1,3 @@
----
-title: "README - Quarto via Docker no Alpine Linux"
-format: gfm
----
-
 # Quarto via Docker no Alpine Linux
 
 Este repositório fornece um script para executar o [Quarto](https://quarto.org) via Docker no Alpine Linux, permitindo usar o comando `quarto` diretamente no terminal.
